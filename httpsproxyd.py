@@ -9,7 +9,7 @@ HOST = '0.0.0.0'
 PORT = 4443
 SERVER_CERTFILE_PATH = './server.pem' # has to contain private key, first the cert, then the key
 ALLOWED_URL_REGEXPS = [
-    re.compile('https://someurl[a-z0-9_-]+\.com',re.I),
+    re.compile('https://static[a-z0-9_-]+\.yggdrasilgaming\.com',re.I),
 ]
 
 class RequestHandler(BaseHTTPRequestHandler):
@@ -61,7 +61,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             elif 'Referer' in self.headers:
                 parsed = urlparse(self.headers['Referer'])
                 params = parse_qs(parsed[4])
-                if self.url_is_allowed(params['url'][0]):
+                if 'url' in params and self.url_is_allowed(params['url'][0]):
                     hdrs = self.prepare_headers(self.headers)
                     resp = self.retrieve_url(params['url'][0] + self.path, hdrs)
                     self.write_response(resp)
