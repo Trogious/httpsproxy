@@ -16,10 +16,12 @@
       -l LOG_FILE   absolute path to log file
       -p PID_FILE   absolute path to PID file
 
-### Certificate
+### Certificate:
 The certificate must be in PEM format and the file must first contain the certificate and the private key in that order.
 
-### Using httpsproxy
+### Using httpsproxy:
 Edit the `httpsproxyd.py` file and edit the `HSPD_ALLOWED_URL_REGEXPS` array, putting in which URLs need the proxying be restricted to.
+
+The proxying is done by adding a query parameter to the URL of the proxy server. Assuming the httpsproxy listens on `https://localhost:4443`, to proxy to a URL of let's say `https://example.com` a proxy URL should look like this: `https://localhost:4443/?url=https://example.com`. This only works if it is allowed by by `HSPD_ALLOWED_URL_REGEXPS`.
 
 There is no need running it from `root` so don't.
