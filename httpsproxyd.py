@@ -174,9 +174,10 @@ if __name__ == '__main__':
     signal.signal(signal.SIGTERM, handle_signal)
     create_log_file(log_file)
     create_pid_file(pid_file)
-    httpd = HTTPServer((host, port), RequestHandler)
     try:
+        httpd = HTTPServer((host, int(port)), RequestHandler)
         httpd.socket = ssl.wrap_socket(httpd.socket, certfile=cert_file, server_side=True)
+        httpd.serve_forever()
     except FileNotFoundError as e:
         log('certificate error: ' + str(e))
         exit_failure()
@@ -184,7 +185,6 @@ if __name__ == '__main__':
         log('certificate SSL error: ' + str(e))
         exit_failure()
     except Exception as e:
-        log('ssl.wrap_socket error: ' + str(e))
+        log('unknown error: ' + str(e))
         exit_failure()
-    httpd.serve_forever()
     remove_pid_file(hspd_pid_file)
