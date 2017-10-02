@@ -121,10 +121,12 @@ def daemonize():
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Runs a daemon acting as HTTPS proxy.')
     parser.add_argument('-c', dest='cert_path', nargs=1, default=[HSPD_SERVER_CERTFILE_PATH], help='absolute path to certificate file')
-    parser.add_argument('-l', dest='log_file', nargs=1, default=[HSPD_LOG_FILE], help='absolute path to log file')
-    parser.add_argument('-p', dest='pid_file', nargs=1, default=[HSPD_PID_FILE], help='absolute path to PID file')
+    parser.add_argument('--logfile', dest='log_file', nargs=1, default=[HSPD_LOG_FILE], help='absolute path to log file')
+    parser.add_argument('--pidfile', dest='pid_file', nargs=1, default=[HSPD_PID_FILE], help='absolute path to PID file')
+    parser.add_argument('-p', dest='port', nargs=1, default=[HSPD_PORT], help='port number to listen on')
+    parser.add_argument('-l', dest='host', nargs=1, default=[HSPD_HOST], help='host/IP address to listen on')
     args = parser.parse_args()
-    return (args.cert_path[0], args.log_file[0], args.pid_file[0])
+    return (args.cert_path[0], args.log_file[0], args.pid_file[0], args.port[0], args.host[0])
 
 
 def create_log_file(log_file_path):
@@ -166,13 +168,13 @@ def handle_signal(signal_number, stack):
 
 
 if __name__ == '__main__':
-    x = (cert_file, log_file, pid_file) = parse_arguments()
+    (cert_file, log_file, pid_file, port, host) = parse_arguments()
     daemonize()
     signal.signal(signal.SIGINT, handle_signal)
     signal.signal(signal.SIGTERM, handle_signal)
     create_log_file(log_file)
     create_pid_file(pid_file)
-    httpd = HTTPServer((HSPD_HOST, HSPD_PORT), RequestHandler)
+    httpd = HTTPServer((host, port), RequestHandler)
     try:
         httpd.socket = ssl.wrap_socket(httpd.socket, certfile=cert_file, server_side=True)
     except FileNotFoundError as e:
