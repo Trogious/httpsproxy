@@ -26,4 +26,4 @@ Edit the `httpsproxyd.py` file and edit the `HSPD_ALLOWED_URL_REGEXPS` array, pu
 
 The proxying is done by adding a query parameter to the URL of the proxy server. Assuming the httpsproxy listens on `https://localhost:4443`, to proxy to a URL of let's say `https://example.com` a proxy URL should look like this: `https://localhost:4443/?url=https://example.com`. This only works if it is allowed by by `HSPD_ALLOWED_URL_REGEXPS`.
 
-There is no need running it as `root` so don't. This is unless you need to listen on a port lower than 1025.
+There is no need running it as `root` so don't. This is unless you need to listen on a port lower than 1024.
