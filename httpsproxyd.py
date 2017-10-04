@@ -135,6 +135,7 @@ def create_log_file(log_file_path):
             global hspd_stderr
             hspd_stderr = open(log_file_path, 'a')
             sys.stderr.close()
+            sys.stderr = hspd_stderr
         log('PID: ' + str(os.getpid()))
     except Exception as e:
         log('error opening log file: %s: %s' % (log_file_path, str(e)))
